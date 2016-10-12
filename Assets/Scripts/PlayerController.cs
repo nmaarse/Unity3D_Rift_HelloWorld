@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 		countText.text = "Count: " + count.ToString();
 		if(count >= numberOfGameObjects)
 		{
-			winText.text = "YOU WIN!";
+			winText.text = "YOU PAY!";
 		}
 	}
 }
