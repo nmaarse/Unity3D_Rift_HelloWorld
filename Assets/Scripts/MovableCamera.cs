@@ -13,12 +13,19 @@ public class MovableCamera : MonoBehaviour
     void Start()
     {
         offset = transform.position;
+        Debug.LogWarning("MovableCamera script started ");
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
         transform.position = InputTracking.GetLocalPosition(VRNode.Head) * sensitivity + offset;
-        winText.text = "position:" + transform.position;
+        
+//Debug.LogWarning("LateUpdate of Movable Camera: " + transform.position);
+    }
+     void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning("MovableCamera collision with " + other.gameObject.tag.ToString());
+        other.gameObject.SetActive(false);
     }
 }
