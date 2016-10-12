@@ -18,10 +18,7 @@ public class MovableCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        //InputTracking.GetLocalPosition(VRNode.Head);
         transform.position = InputTracking.GetLocalPosition(VRNode.Head) * sensitivity + offset;
         winText.text = "position:" + transform.position;
     }
-
-
 }
