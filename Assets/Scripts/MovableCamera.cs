@@ -5,7 +5,7 @@ using UnityEngine.VR;
 public class MovableCamera : MonoBehaviour
 {
 
-    public int sensitivity = 20;
+    public int sensitivity = 30;
     public GameObject player;
     private Vector3 offset;
     public GUIText winText;
