@@ -26,7 +26,15 @@ public class PlayerController : MonoBehaviour
 
         var rigidBody = GetComponent<Rigidbody>();
         rigidBody.AddForce (movement * speed * Time.deltaTime);
+
+        CheckXboxInput();
 	}
+
+    private void CheckXboxInput()
+    {
+        bool pushed = Input.GetButton("Fire1");
+        Debug.LogWarning("PlayerController xboxcontroller button Fire 1 pushed: " + pushed );
+    }
 	
 	void OnTriggerEnter(Collider other) 
 	{
