@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity3D_Rift_HelloWorld.CSharp", "Unity3D_Rift_HelloWorld.CSharp.csproj", "{F83E90DF-70AF-6DFB-F3DB-13E0B76AC0C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F83E90DF-70AF-6DFB-F3DB-13E0B76AC0C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83E90DF-70AF-6DFB-F3DB-13E0B76AC0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83E90DF-70AF-6DFB-F3DB-13E0B76AC0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83E90DF-70AF-6DFB-F3DB-13E0B76AC0C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
