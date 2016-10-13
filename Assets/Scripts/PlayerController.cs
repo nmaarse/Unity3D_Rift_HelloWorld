@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private int numberOfGameObjects;
     public AudioSource pickupAudio;
     public AudioSource finishedAudio;
-
+    public AudioSource backgroundAudio;
 
     void Start()
     {
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         if (count >= numberOfGameObjects)
         {
+            backgroundAudio.Stop();
             finishedAudio.Play();
         }
         else
