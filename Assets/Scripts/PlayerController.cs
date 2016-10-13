@@ -4,11 +4,12 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
-    public GUIText countText;
     public GUIText winText;
     private int count;
     private int numberOfGameObjects;
-    public AudioSource source;
+    public AudioSource pickupAudio;
+    public AudioSource finishedAudio;
+    public AudioSource backgroundAudio;
 
     void Start()
     {
@@ -44,16 +45,28 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             count = count + 1;
             SetCountText();
-            source.Play();
+            PlayAudio();
+        }
+    }
+
+    void PlayAudio()
+    {
+        if (count >= numberOfGameObjects)
+        {
+            backgroundAudio.Stop();
+            finishedAudio.Play();
+        }
+        else
+        {
+            pickupAudio.Play();
         }
     }
 
     void SetCountText()
-    {
-        countText.text = "Count: " + count.ToString();
+     {
         if (count >= numberOfGameObjects)
         {
-            winText.text = "YOU MAKE PAYMENT HAPPEN!";
-        }
+            winText.text = "YOU MAKE PAYMENT HAPPEN!"; 
+        } 
     }
 }
