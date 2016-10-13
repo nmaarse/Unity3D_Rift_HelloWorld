@@ -17,8 +17,9 @@ public class PlayerController : MonoBehaviour
     public int gameTimeToFinishInSeconds;
     private DateTime timeStarted;
     private PlayerState state;
-    private bool audioFinished = false;
+    private bool gameFinished = false;
     private float initialDistanceToGround;
+    private Vector3 initialPosition;
 
     public float jumpforce;
     void Start()
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
         winText.text = "";
         numberOfGameObjects = GameObject.FindGameObjectsWithTag("PickUp").Length;
         state = PlayerState.WaitToStart;
+        initialPosition = transform.position;
         initialDistanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
 
@@ -49,7 +51,7 @@ public class PlayerController : MonoBehaviour
         rigidBody.AddForce(movement * speed * Time.deltaTime);
 
         CheckXboxInput();
-        if(BallOffTheTable())
+        if (BallOffTheTable())
         {
             state = PlayerState.Lose;
         }
@@ -76,13 +78,24 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        if (!audioFinished && (state == PlayerState.Win || state == PlayerState.Lose))
+        if (!gameFinished && (state == PlayerState.Win || state == PlayerState.Lose))
         {
-            audioFinished = true;
+            ShowPickupObjects(false);
+
+            gameFinished = true;
             backgroundAudio.Stop();
             finishedAudio.Play();
         }
     }
+
+    private void ShowPickupObjects(bool show)
+    {
+        foreach (var pickupObject in GameObject.FindGameObjectsWithTag("PickUp"))
+        {
+            pickupObject.SetActive(show);
+        }
+    }
+
 
     private void CheckTimer()
     {
@@ -93,17 +106,16 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        foreach (var pickupObject in GameObject.FindGameObjectsWithTag("PickUp"))
-        {
-            pickupObject.SetActive(false);
-        }
-
         state = PlayerState.Lose;
     }
 
     private void CheckXboxInput()
     {
         bool pushed = Input.GetButton("Fire1");
+
+        if (pushed && (state == PlayerState.Lose || state == PlayerState.Win))
+            StartNewGame();
+
         var rigidBody = GetComponent<Rigidbody>();
         if (pushed && BallOnTheGround())
         {
@@ -111,6 +123,14 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(movement);
             Debug.LogWarning("PlayerController xboxcontroller button Fire 1 processed: " + pushed);
         }
+    }
+
+    private void StartNewGame()
+    {
+        transform.position = initialPosition;
+        ShowPickupObjects(true);
+        state = PlayerState.WaitToStart;
+        count = 0;
     }
 
     private bool BallOnTheGround()
@@ -143,7 +163,7 @@ public class PlayerController : MonoBehaviour
                 pickupAudio.Play();
         }
     }
-    
+
     private enum PlayerState
     {
         WaitToStart,
