@@ -18,13 +18,18 @@ public class PlayerController : MonoBehaviour
     private DateTime timeStarted;
     private PlayerState state;
     private bool audioFinished = false;
+    private float initialDistanceToGround;
 
+    public float jumpforce;
     void Start()
     {
+        jumpforce = 150.0f;
+        gameTimeToFinishInSeconds = 30;
         count = 0;
         winText.text = "";
         numberOfGameObjects = GameObject.FindGameObjectsWithTag("PickUp").Length;
         state = PlayerState.WaitToStart;
+        initialDistanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
 
     void FixedUpdate()
@@ -44,7 +49,12 @@ public class PlayerController : MonoBehaviour
         rigidBody.AddForce(movement * speed * Time.deltaTime);
 
         CheckXboxInput();
+        if(BallOffTheTable())
+        {
+            state = PlayerState.Lose;
+        }
         CheckPlayerState();
+
     }
 
     private void CheckPlayerState()
@@ -94,7 +104,30 @@ public class PlayerController : MonoBehaviour
     private void CheckXboxInput()
     {
         bool pushed = Input.GetButton("Fire1");
-        Debug.LogWarning("PlayerController xboxcontroller button Fire 1 pushed: " + pushed);
+        var rigidBody = GetComponent<Rigidbody>();
+        if (pushed && BallOnTheGround())
+        {
+            Vector3 movement = new Vector3(0.0f, jumpforce, 10.0f);
+            rigidBody.AddForce(movement);
+            Debug.LogWarning("PlayerController xboxcontroller button Fire 1 processed: " + pushed);
+        }
+    }
+
+    private bool BallOnTheGround()
+    {
+        // compare current position with ground position
+        bool grounded = Physics.Raycast(transform.position, -Vector3.up, initialDistanceToGround + 0.1f);
+        Debug.LogWarning("grounded:" + grounded);
+        return grounded;
+    }
+
+    private bool BallOffTheTable()
+    {
+        if (transform.position.y < initialDistanceToGround - 0.1f)
+        {
+            return true;
+        }
+        return false;
     }
 
     void OnTriggerEnter(Collider other)

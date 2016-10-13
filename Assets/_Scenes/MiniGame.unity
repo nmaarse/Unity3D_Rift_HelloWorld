@@ -1673,7 +1673,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
 --- !u!4 &1484536884 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 1ca457aa68d414bde95ec43661b5175d, type: 2}
@@ -1991,7 +1991,8 @@ MonoBehaviour:
   pickupAudio: {fileID: 1122340479}
   finishedAudio: {fileID: 1289932606}
   backgroundAudio: {fileID: 1150323796}
-  gameTimeToFinishInSeconds: 30
+  gameTimeToFinishInSeconds: 0
+  jumpforce: 0
 --- !u!54 &1681742628
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2407,7 +2408,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
 --- !u!1001 &2090117760
 Prefab:
   m_ObjectHideFlags: 0
