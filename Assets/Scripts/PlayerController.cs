@@ -1,49 +1,51 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour 
-{	
-	public float speed;
-	public GUIText countText;
-	public GUIText winText;
-	private int count;
-	private int numberOfGameObjects;
-	
-	void Start()
-	{
-		count = 0;
-		SetCountText();
-		winText.text = "";
-		numberOfGameObjects = GameObject.FindGameObjectsWithTag("PickUp").Length;
-	}
-	
-	void FixedUpdate ()
-	{
-		float moveHorizontal = Input.GetAxis("Horizontal");
-		float moveVertical = Input.GetAxis("Vertical");
-		
-		Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+public class PlayerController : MonoBehaviour
+{
+    public float speed;
+    public GUIText countText;
+    public GUIText winText;
+    private int count;
+    private int numberOfGameObjects;
+    public AudioSource source;
+
+    void Start()
+    {
+        count = 0;
+        SetCountText();
+        winText.text = "";
+        numberOfGameObjects = GameObject.FindGameObjectsWithTag("PickUp").Length;
+    }
+     
+    void FixedUpdate()
+    {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
         var rigidBody = GetComponent<Rigidbody>();
-        rigidBody.AddForce (movement * speed * Time.deltaTime);
-	}
-	
-	void OnTriggerEnter(Collider other) 
-	{
-		if(other.gameObject.tag == "PickUp")
-		{
-			other.gameObject.SetActive(false);
-			count = count + 1;
-			SetCountText();
-		}
-	}
-	
-	void SetCountText ()
-	{
-		countText.text = "Count: " + count.ToString();
-		if(count >= numberOfGameObjects)
-		{
-			winText.text = "YOU PAY!";
-		}
-	}
+        rigidBody.AddForce(movement * speed * Time.deltaTime);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "PickUp")
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+            source.Play();
+        }
+    }
+
+    void SetCountText()
+    {
+        countText.text = "Count: " + count.ToString();
+        if (count >= numberOfGameObjects)
+        {
+            winText.text = "YOU MAKE PAYMENT HAPPEN!";
+        }
+    }
 }
