@@ -5,7 +5,7 @@ using UnityEngine.VR;
 public class MovableCamera : MonoBehaviour
 {
 
-    public int sensitivity = 30;
+    public int sensitivity = 35;
     public GameObject player;
     private Vector3 offset;
     public GUIText winText;
@@ -25,7 +25,10 @@ public class MovableCamera : MonoBehaviour
     }
      void OnTriggerEnter(Collider other)
     {
-        Debug.LogWarning("MovableCamera collision with " + other.gameObject.tag.ToString());
-        other.gameObject.SetActive(false);
+        if (other.gameObject.tag == "PickUp")
+        {
+            Debug.LogWarning("MovableCamera collision with " + other.gameObject.tag.ToString());
+            other.gameObject.SetActive(false);
+        }
     }
 }
