@@ -2,22 +2,30 @@
 using System.Collections;
 using UnityEngine.VR;
 
-public class MovableCamera : MonoBehaviour {
+public class MovableCamera : MonoBehaviour
+{
 
+    public int sensitivity = 30;
     public GameObject player;
     private Vector3 offset;
+    public GUIText winText;
     // Use this for initialization
     void Start()
     {
         offset = transform.position;
+        Debug.LogWarning("MovableCamera script started ");
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        //InputTracking.GetLocalPosition(VRNode.Head);
-        transform.position = InputTracking.GetLocalPosition(VRNode.Head) + offset;
+        transform.position = InputTracking.GetLocalPosition(VRNode.Head) * sensitivity + offset;
+        
+//Debug.LogWarning("LateUpdate of Movable Camera: " + transform.position);
     }
-
-    
+     void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning("MovableCamera collision with " + other.gameObject.tag.ToString());
+        other.gameObject.SetActive(false);
+    }
 }
