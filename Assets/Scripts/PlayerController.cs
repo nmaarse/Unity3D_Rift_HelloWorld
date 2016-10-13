@@ -21,10 +21,12 @@ public class PlayerController : MonoBehaviour
     private float initialDistanceToGround;
     private Vector3 initialPosition;
 
+    private GameObject[] pickupObjects;
+
     public float jumpforce;
     void Start()
     {
-        jumpforce = 150.0f;
+        jumpforce = 250.0f;
         gameTimeToFinishInSeconds = 30;
         count = 0;
         winText.text = "";
@@ -32,6 +34,7 @@ public class PlayerController : MonoBehaviour
         state = PlayerState.WaitToStart;
         initialPosition = transform.position;
         initialDistanceToGround = GetComponent<Collider>().bounds.extents.y;
+        pickupObjects = GameObject.FindGameObjectsWithTag("PickUp");
     }
 
     void FixedUpdate()
@@ -50,7 +53,7 @@ public class PlayerController : MonoBehaviour
         var rigidBody = GetComponent<Rigidbody>();
         rigidBody.AddForce(movement * speed * Time.deltaTime);
 
-        CheckXboxInput();
+        CheckInput();
         if (BallOffTheTable())
         {
             state = PlayerState.Lose;
@@ -66,14 +69,15 @@ public class PlayerController : MonoBehaviour
             case PlayerState.WaitToStart:
                 break;
             case PlayerState.Win:
-                winText.text = "YOU MAKE PAYMENT HAPPEN!";
+                winText.text = "YES, YOU MAKE PAYMENT HAPPEN!";
                 timerText.text = "";
                 break;
             case PlayerState.Lose:
-                winText.text = "TOO SLOW TO MAKE PAYMENT HAPPEN!";
+                winText.text = "YOU FAILED TO MAKE PAYMENT HAPPEN!";
                 timerText.text = "";
                 break;
             case PlayerState.Playing:
+                winText.text = "";
                 CheckTimer();
                 break;
         }
@@ -90,7 +94,8 @@ public class PlayerController : MonoBehaviour
 
     private void ShowPickupObjects(bool show)
     {
-        foreach (var pickupObject in GameObject.FindGameObjectsWithTag("PickUp"))
+        Debug.LogWarning("ShowPickupObjects: " + show.ToString());
+        foreach (var pickupObject in pickupObjects)
         {
             pickupObject.SetActive(show);
         }
@@ -109,28 +114,35 @@ public class PlayerController : MonoBehaviour
         state = PlayerState.Lose;
     }
 
-    private void CheckXboxInput()
+    private void CheckInput()
     {
-        bool pushed = Input.GetButton("Fire1");
+        bool pushed = Input.GetButton("Fire1") || Input.GetKeyDown("space");
 
         if (pushed && (state == PlayerState.Lose || state == PlayerState.Win))
+        {
             StartNewGame();
+            return;
+        }
 
         var rigidBody = GetComponent<Rigidbody>();
         if (pushed && BallOnTheGround())
         {
             Vector3 movement = new Vector3(0.0f, jumpforce, 10.0f);
             rigidBody.AddForce(movement);
-            Debug.LogWarning("PlayerController xboxcontroller button Fire 1 processed: " + pushed);
         }
     }
 
     private void StartNewGame()
     {
-        transform.position = initialPosition;
-        ShowPickupObjects(true);
+        gameFinished = false;
         state = PlayerState.WaitToStart;
+        ShowPickupObjects(true);
         count = 0;
+        transform.position = initialPosition;
+        var rigidBody = GetComponent<Rigidbody>();
+        rigidBody.velocity = new Vector3();
+        backgroundAudio.Play();
+        winText.text = "";
     }
 
     private bool BallOnTheGround()
